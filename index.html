@@ -20,13 +20,25 @@
       margin-bottom: 30px;
     }
 
-    /* کانتینر دکمه‌ها */
+    /* کانتینر دکمه‌های ربات و کانال (بالا) */
+    .top-buttons {
+      max-width: 400px;
+      margin: 0 auto 40px auto;
+    }
+    .top-buttons .btn {
+      display: block;
+      width: 100%;
+      max-width: 300px;
+      margin: 10px auto; /* فاصله بین دکمه‌ها */
+    }
+
+    /* کانتینر دکمه‌های لینک‌ها (زیر) */
     .btn-container {
       display: grid;
       grid-template-columns: 1fr;
       gap: 12px;
       max-width: 640px;
-      margin: 0 auto 30px auto;
+      margin: 0 auto;
     }
 
     /* در صفحه‌های بزرگ 2 ستون */
@@ -48,7 +60,7 @@
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       width: 100%;
       max-width: 300px;
-      justify-self: center; /* وسط چین در grid */
+      justify-self: center;
     }
 
     .btn:hover {
@@ -75,12 +87,17 @@
       margin-top: 20px;
       font-size: 16px;
       color: #333;
-      min-height: 24px; /* برای جلوگیری از جابجایی متن */
+      min-height: 24px;
     }
   </style>
 </head>
 <body>
   <h1>کپی لینک سرورها</h1>
+
+  <div class="top-buttons">
+    <button class="btn special-btn" onclick="window.location.href='https://t.me/s/purcowbot'">🤖 ورود به ربات</button>
+    <button class="btn danger-btn" onclick="window.location.href='https://t.me/s/purnet'">📢 ورود به کانال</button>
+  </div>
 
   <div class="btn-container">
     <button class="btn" onclick="copyFromFile('vless')">📋 کپی VLESS</button>
@@ -90,9 +107,6 @@
     <button class="btn" onclick="copyFromFile('w2w')">📋 کپی W2W</button>
     <button class="btn" onclick="copyFromFile('wireguard')">📋 کپی WIREGUARD</button>
     <button class="btn" onclick="copyFromFile('pureguard')">📋 کپی PUREGUARD</button>
-
-    <button class="btn special-btn" onclick="window.location.href='https://t.me/s/purcowbot'">🤖 ورود به ربات</button>
-    <button class="btn danger-btn" onclick="window.location.href='https://t.me/s/purnet'">📢 ورود به کانال</button>
   </div>
 
   <p id="status"></p>
@@ -127,9 +141,9 @@
         const decodedText = decodeBase64ToUtf8(base64);
         const first20Lines = decodedText.split('\n').slice(0, 20).join('\n');
         await navigator.clipboard.writeText(first20Lines);
-        document.getElementById('status').textContent = `✅ ${type.toUpperCase()} با موفقیت  کپی شد!`;
+        document.getElementById('status').textContent = `✅ ${type.toUpperCase()} با موفقیت decode و کپی شد!`;
       } catch (err) {
-        document.getElementById('status').textContent = `❌ خطا در دریافت یا  ${type}: ${err}`;
+        document.getElementById('status').textContent = `❌ خطا در دریافت یا decode ${type}: ${err}`;
       }
     }
   </script>
