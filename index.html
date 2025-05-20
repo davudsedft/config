@@ -1,1 +1,78 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>کپی لینک‌ها</title>
+  <style>
+    body {
+      font-family: Vazir, sans-serif;
+      direction: rtl;
+      background-color: #f5f7fa;
+      text-align: center;
+      padding: 50px;
+    }
+    h1 {
+      color: #333;
+    }
+    .btn {
+      background-color: #4CAF50;
+      color: white;
+      padding: 15px 30px;
+      margin: 10px;
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .btn:hover {
+      background-color: #45a049;
+    }
+    #status {
+      margin-top: 30px;
+      font-size: 18px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>کپی لینک سرورها</h1>
+
+  <button class="btn" onclick="copyFromFile('vless')">📋 کپی VLESS</button>
+  <button class="btn" onclick="copyFromFile('vmess')">📋 کپی VMESS</button>
+  <button class="btn" onclick="copyFromFile('trojan')">📋 کپی TROJAN</button>
+  <button class="btn" onclick="copyFromFile('shadowsocks')">📋 کپی SHADOWSOCKS</button>
+  <button class="btn" onclick="copyFromFile('w2w')">📋 کپی W2W</button>
+  <button class="btn" onclick="copyFromFile('wireguard')">📋 کپی WIREGUARD</button>
+  <button class="btn" onclick="copyFromFile('pureguard')">📋 کپی PUREGUARD</button>
+
+  <p id="status"></p>
+
+  <script>
+    const urls = {
+      vless: 'https://myweb.com/mytxt',
+      vmess: 'https://myweb.com/mytxt',
+      trojan: 'https://myweb.com/mytxt',
+      shadowsocks: 'https://myweb.com/mytxt',
+      w2w: 'https://myweb.com/mytxt',
+      wireguard: 'https://myweb.com/mytxt',
+      pureguard: 'https://myweb.com/mytxt'
+    };
+
+    async function copyFromFile(type) {
+      const fileUrl = urls[type];
+      try {
+        const response = await fetch(fileUrl);
+        const text = await response.text();
+        const first20 = text.split('\n').slice(0, 20).join('\n');
+        await navigator.clipboard.writeText(first20);
+        document.getElementById('status').textContent = `✅ ${type.toUpperCase()} با موفقیت کپی شد!`;
+      } catch (err) {
+        document.getElementById('status').textContent = `❌ خطا در دریافت ${type}: ${err}`;
+      }
+    }
+  </script>
+</body>
+</html>
 
