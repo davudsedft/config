@@ -2,6 +2,7 @@
 <html lang="fa">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>کپی لینک‌ها</title>
   <style>
     body {
@@ -9,30 +10,65 @@
       direction: rtl;
       background-color: #f5f7fa;
       text-align: center;
-      padding: 50px;
+      padding: 20px;
+      margin: 0;
     }
+
     h1 {
       color: #333;
+      font-size: 24px;
+      margin-bottom: 30px;
     }
+
     .btn {
       background-color: #4CAF50;
       color: white;
-      padding: 15px 30px;
+      padding: 12px 24px;
       margin: 10px;
       border: none;
       border-radius: 12px;
-      font-size: 18px;
+      font-size: 16px;
       cursor: pointer;
       transition: 0.3s;
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      width: 90%;
+      max-width: 300px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
     }
+
     .btn:hover {
       background-color: #45a049;
     }
+
+    .special-btn {
+      background-color: #2196F3;
+    }
+
+    .special-btn:hover {
+      background-color: #1976D2;
+    }
+
+    .danger-btn {
+      background-color: #E91E63;
+    }
+
+    .danger-btn:hover {
+      background-color: #C2185B;
+    }
+
     #status {
-      margin-top: 30px;
-      font-size: 18px;
+      margin-top: 20px;
+      font-size: 16px;
       color: #333;
+    }
+
+    @media (min-width: 600px) {
+      .btn {
+        display: inline-block;
+        width: auto;
+      }
     }
   </style>
 </head>
@@ -47,6 +83,9 @@
   <button class="btn" onclick="copyFromFile('wireguard')">📋 کپی WIREGUARD</button>
   <button class="btn" onclick="copyFromFile('pureguard')">📋 کپی PUREGUARD</button>
 
+  <button class="btn special-btn" onclick="window.location.href='https://t.me/s/purcowbot'">🤖 ورود به ربات</button>
+  <button class="btn danger-btn" onclick="window.location.href='https://t.me/s/purnet'">📢 ورود به کانال</button>
+
   <p id="status"></p>
 
 <script>
@@ -60,9 +99,18 @@
     pureguard: 'https://myweb.com/mytxt'
   };
 
-  function base64ToUtf8(base64) {
-    const binary = atob(base64);
-    const bytes = new Uint8Array([...binary].map(char => char.charCodeAt(0)));
+  function decodeBase64ToUtf8(base64) {
+    // decode base64 به binary string
+    const binaryString = atob(base64);
+
+    // تبدیل binary string به Uint8Array برای decode صحیح UTF-8
+    const len = binaryString.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+
+    // دیکودر UTF-8
     const decoder = new TextDecoder('utf-8');
     return decoder.decode(bytes);
   }
@@ -71,26 +119,18 @@
     const fileUrl = urls[type];
     try {
       const response = await fetch(fileUrl);
-      const base64 = await response.text();
-      const cleanBase64 = base64.trim();
+      const base64 = (await response.text()).trim();
 
-      // دیکود حرفه‌ای Base64 به UTF-8
-      const decodedText = base64ToUtf8(cleanBase64);
-
-      // گرفتن ۲۰ خط اول
+      const decodedText = decodeBase64ToUtf8(base64);
       const first20Lines = decodedText.split('\n').slice(0, 20).join('\n');
 
-      // کپی به کلیپ‌بورد
       await navigator.clipboard.writeText(first20Lines);
-
       document.getElementById('status').textContent = `✅ ${type.toUpperCase()} با موفقیت decode و کپی شد!`;
     } catch (err) {
-      document.getElementById('status').textContent = `❌ خطا در decode یا fetch ${type}: ${err}`;
+      document.getElementById('status').textContent = `❌ خطا در دریافت یا decode ${type}: ${err}`;
     }
   }
 </script>
 
-
 </body>
 </html>
-
