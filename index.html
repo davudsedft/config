@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="fa">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>کپی لینک‌ها</title>
   <style>
     body {
@@ -20,22 +20,35 @@
       margin-bottom: 30px;
     }
 
+    /* کانتینر دکمه‌ها */
+    .btn-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      max-width: 640px;
+      margin: 0 auto 30px auto;
+    }
+
+    /* در صفحه‌های بزرگ 2 ستون */
+    @media (min-width: 600px) {
+      .btn-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
     .btn {
-      background-color: #4CAF50;
+      background-color: #4caf50;
       color: white;
       padding: 12px 24px;
-      margin: 10px;
       border: none;
       border-radius: 12px;
       font-size: 16px;
       cursor: pointer;
       transition: 0.3s;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      width: 90%;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 100%;
       max-width: 300px;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
+      justify-self: center; /* وسط چین در grid */
     }
 
     .btn:hover {
@@ -43,94 +56,82 @@
     }
 
     .special-btn {
-      background-color: #2196F3;
+      background-color: #2196f3;
     }
 
     .special-btn:hover {
-      background-color: #1976D2;
+      background-color: #1976d2;
     }
 
     .danger-btn {
-      background-color: #E91E63;
+      background-color: #e91e63;
     }
 
     .danger-btn:hover {
-      background-color: #C2185B;
+      background-color: #c2185b;
     }
 
     #status {
       margin-top: 20px;
       font-size: 16px;
       color: #333;
-    }
-
-    @media (min-width: 600px) {
-      .btn {
-        display: inline-block;
-        width: auto;
-      }
+      min-height: 24px; /* برای جلوگیری از جابجایی متن */
     }
   </style>
 </head>
 <body>
   <h1>کپی لینک سرورها</h1>
 
-  <button class="btn" onclick="copyFromFile('vless')">📋 کپی VLESS</button>
-  <button class="btn" onclick="copyFromFile('vmess')">📋 کپی VMESS</button>
-  <button class="btn" onclick="copyFromFile('trojan')">📋 کپی TROJAN</button>
-  <button class="btn" onclick="copyFromFile('shadowsocks')">📋 کپی SHADOWSOCKS</button>
-  <button class="btn" onclick="copyFromFile('w2w')">📋 کپی W2W</button>
-  <button class="btn" onclick="copyFromFile('wireguard')">📋 کپی WIREGUARD</button>
-  <button class="btn" onclick="copyFromFile('pureguard')">📋 کپی PUREGUARD</button>
+  <div class="btn-container">
+    <button class="btn" onclick="copyFromFile('vless')">📋 کپی VLESS</button>
+    <button class="btn" onclick="copyFromFile('vmess')">📋 کپی VMESS</button>
+    <button class="btn" onclick="copyFromFile('trojan')">📋 کپی TROJAN</button>
+    <button class="btn" onclick="copyFromFile('shadowsocks')">📋 کپی SHADOWSOCKS</button>
+    <button class="btn" onclick="copyFromFile('w2w')">📋 کپی W2W</button>
+    <button class="btn" onclick="copyFromFile('wireguard')">📋 کپی WIREGUARD</button>
+    <button class="btn" onclick="copyFromFile('pureguard')">📋 کپی PUREGUARD</button>
 
-  <button class="btn special-btn" onclick="window.location.href='https://t.me/s/purcowbot'">🤖 ورود به ربات</button>
-  <button class="btn danger-btn" onclick="window.location.href='https://t.me/s/purnet'">📢 ورود به کانال</button>
+    <button class="btn special-btn" onclick="window.location.href='https://t.me/s/purcowbot'">🤖 ورود به ربات</button>
+    <button class="btn danger-btn" onclick="window.location.href='https://t.me/s/purnet'">📢 ورود به کانال</button>
+  </div>
 
   <p id="status"></p>
 
-<script>
-  const urls = {
-    vless: 'https://raw.githubusercontent.com/davudsedft/vless/refs/heads/main/vmess.txt',
-    vmess: 'https://myweb.com/mytxt',
-    trojan: 'https://myweb.com/mytxt',
-    shadowsocks: 'https://myweb.com/mytxt',
-    w2w: 'https://myweb.com/mytxt',
-    wireguard: 'https://myweb.com/mytxt',
-    pureguard: 'https://myweb.com/mytxt'
-  };
+  <script>
+    const urls = {
+      vless: 'https://raw.githubusercontent.com/davudsedft/vless/refs/heads/main/vless.txt',
+      vmess: 'https://raw.githubusercontent.com/davudsedft/vless/refs/heads/main/vmess.txt',
+      trojan: 'https://raw.githubusercontent.com/davudsedft/vless/refs/heads/main/trojan.txt',
+      shadowsocks: 'https://raw.githubusercontent.com/davudsedft/vless/refs/heads/main/shadowsocks.txt',
+      w2w: 'https://raw.githubusercontent.com/davudsedft/vless/refs/heads/main/w2w.txt',
+      wireguard: 'https://raw.githubusercontent.com/davudsedft/vless/refs/heads/main/wireguard.txt',
+      pureguard: 'https://raw.githubusercontent.com/davudsedft/vless/refs/heads/main/purguard.txt'
+    };
 
-  function decodeBase64ToUtf8(base64) {
-    // decode base64 به binary string
-    const binaryString = atob(base64);
-
-    // تبدیل binary string به Uint8Array برای decode صحیح UTF-8
-    const len = binaryString.length;
-    const bytes = new Uint8Array(len);
-    for (let i = 0; i < len; i++) {
-      bytes[i] = binaryString.charCodeAt(i);
+    function decodeBase64ToUtf8(base64) {
+      const binaryString = atob(base64);
+      const len = binaryString.length;
+      const bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+      const decoder = new TextDecoder('utf-8');
+      return decoder.decode(bytes);
     }
 
-    // دیکودر UTF-8
-    const decoder = new TextDecoder('utf-8');
-    return decoder.decode(bytes);
-  }
-
-  async function copyFromFile(type) {
-    const fileUrl = urls[type];
-    try {
-      const response = await fetch(fileUrl);
-      const base64 = (await response.text()).trim();
-
-      const decodedText = decodeBase64ToUtf8(base64);
-      const first20Lines = decodedText.split('\n').slice(0, 20).join('\n');
-
-      await navigator.clipboard.writeText(first20Lines);
-      document.getElementById('status').textContent = `✅ ${type.toUpperCase()} با موفقیت decode و کپی شد!`;
-    } catch (err) {
-      document.getElementById('status').textContent = `❌ خطا در دریافت یا decode ${type}: ${err}`;
+    async function copyFromFile(type) {
+      const fileUrl = urls[type];
+      try {
+        const response = await fetch(fileUrl);
+        const base64 = (await response.text()).trim();
+        const decodedText = decodeBase64ToUtf8(base64);
+        const first20Lines = decodedText.split('\n').slice(0, 20).join('\n');
+        await navigator.clipboard.writeText(first20Lines);
+        document.getElementById('status').textContent = `✅ ${type.toUpperCase()} با موفقیت  کپی شد!`;
+      } catch (err) {
+        document.getElementById('status').textContent = `❌ خطا در دریافت یا  ${type}: ${err}`;
+      }
     }
-  }
-</script>
-
+  </script>
 </body>
 </html>
