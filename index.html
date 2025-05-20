@@ -49,30 +49,42 @@
 
   <p id="status"></p>
 
-  <script>
-    const urls = {
-      vless: 'https://raw.githubusercontent.com/davudsedft/vless/refs/heads/main/vmess.txt',
-      vmess: 'https://myweb.com/mytxt',
-      trojan: 'https://myweb.com/mytxt',
-      shadowsocks: 'https://myweb.com/mytxt',
-      w2w: 'https://myweb.com/mytxt',
-      wireguard: 'https://myweb.com/mytxt',
-      pureguard: 'https://myweb.com/mytxt'
-    };
+<script>
+  const urls = {
+    vless: 'https://raw.githubusercontent.com/davudsedft/vless/refs/heads/main/vmess.txt',
+    vmess: 'https://myweb.com/mytxt',
+    trojan: 'https://myweb.com/mytxt',
+    shadowsocks: 'https://myweb.com/mytxt',
+    w2w: 'https://myweb.com/mytxt',
+    wireguard: 'https://myweb.com/mytxt',
+    pureguard: 'https://myweb.com/mytxt'
+  };
 
-    async function copyFromFile(type) {
-      const fileUrl = urls[type];
-      try {
-        const response = await fetch(fileUrl);
-        const text = await response.text();
-        const first20 = text.split('\n').slice(0, 20).join('\n');
-        await navigator.clipboard.writeText(first20);
-        document.getElementById('status').textContent = `✅ ${type.toUpperCase()} با موفقیت کپی شد!`;
-      } catch (err) {
-        document.getElementById('status').textContent = `❌ خطا در دریافت ${type}: ${err}`;
-      }
+  async function copyFromFile(type) {
+    const fileUrl = urls[type];
+    try {
+      const response = await fetch(fileUrl);
+      const base64 = await response.text();
+
+      // حذف فضای خالی یا خطوط اضافی
+      const cleanBase64 = base64.trim();
+
+      // decode کردن Base64 به رشته متنی
+      const decodedText = atob(cleanBase64);
+
+      // جدا کردن به خطوط و گرفتن ۲۰ تای اول
+      const lines = decodedText.split('\n').slice(0, 20).join('\n');
+
+      // کپی به کلیپ‌بورد
+      await navigator.clipboard.writeText(lines);
+
+      document.getElementById('status').textContent = `✅ ${type.toUpperCase()} با موفقیت decode و کپی شد!`;
+    } catch (err) {
+      document.getElementById('status').textContent = `❌ خطا در دریافت یا decode ${type}: ${err}`;
     }
-  </script>
+  }
+</script>
+
 </body>
 </html>
 
