@@ -146,19 +146,23 @@ body {
       return decoder.decode(bytes);
     }
 
-    async function copyFromFile(type) {
-      const fileUrl = urls[type];
-      try {
-        const response = await fetch(fileUrl);
-        const base64 = (await response.text()).trim();
-        const decodedText = decodeBase64ToUtf8(base64);
-        const first20Lines = decodedText.split('\n').slice(0, 20).join('\n');
-        await navigator.clipboard.writeText(first20Lines);
-        document.getElementById('status').textContent = `✅ ${type.toUpperCase()} با موفقیت decode و کپی شد!`;
-      } catch (err) {
-        document.getElementById('status').textContent = `❌ خطا در دریافت یا decode ${type}: ${err}`;
-      }
-    }
+async function copyFromFile(type) {
+  const fileUrl = urls[type];
+  const status = document.getElementById('status');
+  try {
+    const response = await fetch(fileUrl);
+    const base64 = (await response.text()).trim();
+    const decodedText = decodeBase64ToUtf8(base64);
+    const first20Lines = decodedText.split('\n').slice(0, 20).join('\n');
+    await navigator.clipboard.writeText(first20Lines);
+    status.textContent = `✅ ${type.toUpperCase()} با موفقیت decode و کپی شد!`;
+    status.style.color = '#2e7d32'; // سبز ملایم
+  } catch (err) {
+    status.textContent = `❌ خطا در دریافت یا decode ${type}: ${err}`;
+    status.style.color = '#c62828'; // قرمز برای خطا
+  }
+}
+
   </script>
 </body>
 </html>
